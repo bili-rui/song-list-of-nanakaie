@@ -1,6 +1,10 @@
 module.exports = {
+  // 忽略打包时的代码规范检查
   eslint: {
-    // 忽略打包时的代码规范检查，直接强行打包
     ignoreDuringBuilds: true,
   },
+  // 关闭图片自动压缩功能（静态导出必须开启）
+  images: {
+    unoptimized: true,
+  }
 }
