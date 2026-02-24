@@ -23,7 +23,6 @@ import MusicList from "../public/music_list_7.json";
 
 import SongDetail from "../components/SongDetail.component";
 import MandarinBtn from "../components/MandarinBtn.component";
-import PianoBtn from "../components/PianoBtn";
 import ChevronSVG from "../components/ChevronSVG.component";
 import BiliPlayerModal from "../components/BiliPlayerModal.component";
 
@@ -85,7 +84,7 @@ export default function Home() {
       (categorySelection.initial != ""
         ? song.initial?.includes(categorySelection.initial)
         : true) &&
-      //首字母过滤按钮
+      //备注过滤按钮
       (categorySelection.remark != ""
         ? song.remarks?.toLowerCase().includes(categorySelection.remark)
         : true) &&
@@ -95,22 +94,18 @@ export default function Home() {
 
   //处理用户复制行为
   const handleClickToCopy = (song) => {
-    //复制到剪贴板并发送Toast
+    // 统一复制格式为：点歌 + 空格 + 歌名
+    copy("点歌 " + song.innerText);
+    
+    // 发送Toast提示
     if (song.id.includes("paid")) {
-      //付费曲目
-      copy("点歌￥" + song.innerText);
-      // navigator.clipboard.writeText("点歌 " + songName); //如支持iOS则可替换
-      //复制成功反馈
       toast.success(
-        `付费曲目"` +
+        `付费曲目 "` +
           song.innerText +
-          `"成功复制到剪贴板!记得发100的SC或者水晶球哦~`
+          `" 成功复制到剪贴板!记得发100的SC或者水晶球哦~`
       );
     } else {
-      //免费曲目
-      copy("点歌" + song.innerText);
-      // navigator.clipboard.writeText("点歌 " + songName); //如支持iOS则可替换
-      toast.success(`"` + song.innerText + `"成功复制到剪贴板!`);
+      toast.success(`"` + song.innerText + `" 成功复制到剪贴板!`);
     }
   };
 
@@ -155,20 +150,22 @@ export default function Home() {
     let songName_ = document.querySelector(
       ".songList>tr:nth-child(" + random + ")"
     ).childNodes[1];
+    
     if (!songName_) {
       toast.info("歌单已经没歌了!");
-    } else if (songName_.id.includes("paid")) {
-      //如付费曲目
-      copy("点歌￥" + songName_.innerText);
-      toast.success(
-        `付费曲目"` +
-          songName_.innerText +
-          `"成功复制到剪贴板!记得发100的SC或者水晶球哦~`
-      );
     } else {
-      //如免费曲目
-      copy("点歌" + songName_.innerText);
-      toast.success(`"` + songName_.innerText + `"成功复制到剪贴板!`);
+      // 统一复制格式为：点歌 + 空格 + 歌名
+      copy("点歌 " + songName_.innerText);
+      
+      if (songName_.id.includes("paid")) {
+        toast.success(
+          `付费曲目 "` +
+            songName_.innerText +
+            `" 成功复制到剪贴板!记得发100的SC或者水晶球哦~`
+        );
+      } else {
+        toast.success(`"` + songName_.innerText + `" 成功复制到剪贴板!`);
+      }
     }
   };
 
@@ -186,14 +183,15 @@ export default function Home() {
 
   return (
     <div className={styles.outerContainer}>
-      <Link href="https://live.bilibili.com/23777594" passHref>
+      {/* 真实的直播间链接 */}
+      <Link href="https://live.bilibili.com/1772924729" passHref>
         <a target="_blank" style={{ textDecoration: "none", color: "#1D0C26" }}>
           <div className={styles.goToLiveDiv}>
             <div className={styles.cornerToggle}>
               <Image
                 loader={imageLoader}
                 src="bilibili_logo_padded.png"
-                alt="打开自我介绍"
+                alt="打开直播间"
                 width={50}
                 height={50}
               />
@@ -209,7 +207,7 @@ export default function Home() {
           <div style={{ borderRadius: "100% !important" }}>
             <Image
             loader={imageLoader}
-            src="tiny_nanakaie.webp"
+            src="tiny_avatar.webp" 
             alt="打开自我介绍"
             width={50}
             height={50}
@@ -223,74 +221,22 @@ export default function Home() {
       <Container>
 
         <Head>
-          <title>七禾いえ的歌单</title>
+          <title>韩二吖Echoes的歌单</title>
           <meta
             name="keywords"
-            content="七禾いえ,B站,bilibili,哔哩哔哩,电台唱见,歌单"
+            content="韩二吖Echoes,韩二吖,B站,bilibili,哔哩哔哩,电台唱见,歌单"
           />
-          <meta name="description" content="七禾いえ的歌单" />
-
+          <meta name="description" content="韩二吖Echoes的歌单" />
           <meta name="theme-color" content="#151516" />
           <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-          <meta name="apple-mobile-web-app-title" content="七禾いえ的歌单" />
           <meta name='format-detection' content='telephone=no' />
-          <meta name='msapplication-config' content='/a2hs/browserconfig.xml' />
-          <meta name='msapplication-tap-highlight' content='no' />
+          
           <link rel='shortcut icon' type="image/x-icon" sizes="48x48" href='/favicon.ico' />
-
-          <link rel="apple-touch-icon" sizes="57x57" href="/a2hs/apple-icon-57x57.png" />
-          <link rel="apple-touch-icon" sizes="60x60" href="/a2hs/apple-icon-60x60.png" />
-          <link rel="apple-touch-icon" sizes="72x72" href="/a2hs/apple-icon-72x72.png" />
-          <link rel="apple-touch-icon" sizes="76x76" href="/a2hs/apple-icon-76x76.png" />
-          <link rel="apple-touch-icon" sizes="114x114" href="/a2hs/apple-icon-114x114.png" />
-          <link rel="apple-touch-icon" sizes="120x120" href="/a2hs/apple-icon-120x120.png" />
-          <link rel="apple-touch-icon" sizes="144x144" href="/a2hs/apple-icon-144x144.png" />
-          <link rel="apple-touch-icon" sizes="152x152" href="/a2hs/apple-icon-152x152.png" />
-          <link rel="apple-touch-icon" sizes="180x180" href="/a2hs/apple-icon-180x180.png" />
           <link rel="icon" type="image/png" sizes="192x192"  href="/a2hs/android-icon-192x192.png" />
           <link rel="icon" type="image/png" sizes="32x32" href="/a2hs/favicon-32x32.png" />
           <link rel="icon" type="image/png" sizes="96x96" href="/a2hs/favicon-96x96.png" />
           <link rel="icon" type="image/png" sizes="16x16" href="/a2hs/favicon-16x16.png" />
           <link rel="manifest" href="/a2hs/manifest.json" />
-          <meta name="msapplication-TileColor" content="#bfc99a" />
-          <meta name="msapplication-TileImage" content="/a2hs/ms-icon-144x144.png" />
-
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="splash_screens/iPhone_14_Pro_Max_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="splash_screens/iPhone_14_Pro_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="splash_screens/iPhone_14_Plus__iPhone_13_Pro_Max__iPhone_12_Pro_Max_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="splash_screens/iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="splash_screens/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="splash_screens/iPhone_11_Pro_Max__iPhone_XS_Max_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/iPhone_11__iPhone_XR_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="splash_screens/iPhone_8_Plus__iPhone_7_Plus__iPhone_6s_Plus__iPhone_6_Plus_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/iPhone_8__iPhone_7__iPhone_6s__iPhone_6__4.7__iPhone_SE_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/4__iPhone_SE__iPod_touch_5th_generation_and_later_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/12.9__iPad_Pro_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/11__iPad_Pro__10.5__iPad_Pro_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/10.9__iPad_Air_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/10.5__iPad_Air_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/10.2__iPad_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="splash_screens/8.3__iPad_Mini_landscape.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash_screens/iPhone_14_Pro_Max_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash_screens/iPhone_14_Pro_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash_screens/iPhone_14_Plus__iPhone_13_Pro_Max__iPhone_12_Pro_Max_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash_screens/iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash_screens/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash_screens/iPhone_11_Pro_Max__iPhone_XS_Max_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/iPhone_11__iPhone_XR_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash_screens/iPhone_8_Plus__iPhone_7_Plus__iPhone_6s_Plus__iPhone_6_Plus_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/iPhone_8__iPhone_7__iPhone_6s__iPhone_6__4.7__iPhone_SE_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/4__iPhone_SE__iPod_touch_5th_generation_and_later_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/12.9__iPad_Pro_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/11__iPad_Pro__10.5__iPad_Pro_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/10.9__iPad_Air_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/10.5__iPad_Air_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/10.2__iPad_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_portrait.png" />
-          <link rel="apple-touch-startup-image" media="screen and (device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash_screens/8.3__iPad_Mini_portrait.png" />
         </Head>
 
         <section className={styles.main}>
@@ -298,18 +244,23 @@ export default function Home() {
           <Row>
             <Col className={styles.titleCol}>
               <div className={"pt-3 " + styles.titleBox}>
-                <Image
-                  loader={imageLoader}
-                  className={styles.avatar}
-                  src="nanakaie.webp"
-                  alt="七宝的头像"
-                  width={250}
-                  height={250}
-                />
+                {/* 给大头像添加跳转链接 */}
+                <Link href="https://space.bilibili.com/1184434512" passHref>
+                  <a target="_blank" style={{ cursor: "pointer" }} title="访问二吖的B站主页">
+                    <Image
+                      loader={imageLoader}
+                      className={styles.avatar}
+                      src="avatar.png"
+                      alt="韩二吖的头像"
+                      width={250}
+                      height={250}
+                    />
+                  </a>
+                </Link>
                 <h1
                   className={"display-6 text-center pt-3 " + styles.grandTitle}
                 >
-                  七禾いえ
+                  韩二吖Echoes
                 </h1>
                 <h1 className={"display-6 text-center " + styles.grandTitle}>
                   和她拿手的<b>{filteredSongList.length}</b>首歌
@@ -321,73 +272,24 @@ export default function Home() {
               <div className={styles.introBox}>
                 <div className={styles.introBoxInnerDiv}>
                   <div className={styles.introTitle}>
-                    <h5>七禾的自我介绍</h5>
-                    <div className="d-flex">
-                      <Link
-                        href="https://music.163.com/#/user?id=383239879"
-                        passHref
-                      >
-                        <a
-                          target="_blank"
-                          style={{
-                            marginRight: "1rem",
-                            cursor: 'url("/cursor_pointer.png"), pointer',
-                          }}
-                          title="七禾的网易云音乐主页"
-                        >
-                          <Image
-                            loader={imageLoader}
-                            src="163music.ico"
-                            alt="七禾的网易云音乐主页链接"
-                            width={24}
-                            height={24}
-                          />
-                        </a>
-                      </Link>
-                      <Link
-                        href="https://y.qq.com/n/ryqq/singer/003XSaZ01pyD8x"
-                        passHref
-                      >
-                        <a
-                          target="_blank"
-                          style={{
-                            cursor: 'url("/cursor_pointer.png"), pointer',
-                          }}
-                          title="七禾的QQ音乐主页"
-                        >
-                          <Image
-                            loader={imageLoader}
-                            src="qqmusic.ico"
-                            alt="七禾的QQ音乐主页链接"
-                            width={24}
-                            height={24}
-                          />
-                        </a>
-                      </Link>
-                    </div>
+                    <h5>韩二吖的自我介绍</h5>
                   </div>
                   <p className={styles.introParagraph}>
-                    🐏咩，这里是小羊人七禾，是一只来自咩星的绵羊（羊毛虽好但不要薅七禾的羊毛⊙∀⊙！）
-                    性别女 没有角但有耳朵 身高160cm 生日6月26日
+                    🎤 哈喽，这里是韩二吖Echoes！（在这里填写属于你的个性化自我介绍文字哦~ 可以写你的生日、爱好等等）
                   </p>
                   <p className={styles.introParagraph}>
-                    🐏直播内容主打吹拉弹唱（吹水·拉胯·弹钢琴·唱歌），歌曲语言包括中日英粤韩。偶尔偶尔打打游戏
-                    {/** （血压飙升的那种。目前直播时间是工作日早上9.40晚上20.40和周末早上10.40晚上21.00。 */}
-                    
+                    🎵 直播内容主打唱歌和聊天，歌曲语言包括国语等，欢迎大家来直播间听歌放松！
                   </p>
                   <p className={styles.introParagraph}>
-                    🐏本直播间郑重承诺点歌不用戴牌子，只需打米，一个喵娘点唱，sc置顶，上船无限点歌还可以指定学歌噢。个别高能歌曲需要水晶球。
+                    🌟 本直播间点歌规则：（请在这里写上你的点歌要求，比如是否需要打赏、有没有免流名额等）
                   </p>
                   <p className={styles.introParagraph}>
-                    🐏欢迎大家投递自己生活中有趣的小故事或者苦恼的问题到七羊羊的匿名提问箱，
-                    累积到一定数量会开启提问箱专场ε(*･ω･)_/ﾟ:･☆
-                  </p>
-                  <p className={styles.introParagraph}>
-                    🐏本羊正经的时候超正经，不正经的时候也超不正经，希望新来的朋友可以多来直播间和我一起玩，我们互相了解！我会做你最可爱的小羊，你也会是我最嫩绿可口的那颗草（bushi！
+                    ✨ 感谢每一个来到直播间陪伴我的朋友，希望我们能在这里一起度过开心的时光！
                   </p>
                   <div className="d-flex flex-nowrap justify-content-evenly">
+                    {/* 真实的歌切B站链接 */}
                     <Link
-                      href="https://www.tapechat.net/uu/I5WYEZ/AP42LSVE"
+                      href="https://space.bilibili.com/1184434512"
                       passHref
                     >
                       <a target="_blank">
@@ -397,47 +299,10 @@ export default function Home() {
                         >
                           <img
                             className={styles.biliIcon}
-                            src="/tapechat.png"
-                            alt="提问箱贴图"
+                            src="/gui_shang.webp"
+                            alt="歌切贴图"
                           />{" "}
-                          匿名提问箱 <ChevronSVG />
-                        </Button>
-                      </a>
-                    </Link>
-                    <Link
-                    href="https://space.bilibili.com/7011134/dynamic"
-                    passHref
-                  >
-                    <a target="_blank">
-                      <Button
-                        className={styles.customRandomButton}
-                        style={{ marginTop: 0, border: "2px solid #B4A96D" }}
-                      >
-                        <img
-                          className={styles.biliIcon}
-                          src="/gui_shang.webp"
-                          alt="鬼上いえ头像贴图"
-                        />{" "}
-                        歌切（@鬼上いえ） <ChevronSVG />
-                      </Button>
-                    </a>
-                  </Link>
-                    <Link
-                      href="https://space.bilibili.com/545589798/dynamic"
-                      passHref
-                    >
-                      <a target="_blank">
-                        <Button
-                          className={styles.customRandomButton}
-                          style={{ marginTop: 0, border: "2px solid #B4A96D" }}
-                        >
-                          <img
-                            className={styles.biliIcon}
-                            src="/qie_ge.webp"
-                            alt="屑羊羊切片组贴图"
-                            style={{ borderRadius: "100%" }}
-                          />{" "}
-                          切片组 <ChevronSVG />
+                          二吖歌切 <ChevronSVG />
                         </Button>
                       </a>
                     </Link>
@@ -478,42 +343,6 @@ export default function Home() {
                       <div className="d-grid">
                         <Button
                           className={
-                            categorySelection.lang == "日语"
-                              ? styles.customCategoryButtonActive
-                              : styles.customCategoryButton
-                          }
-                          onClick={(e) => {
-                            categorySelection.lang == "日语"
-                              ? setLanguageState("")
-                              : setLanguageState("日语");
-                          }}
-                        >
-                          日语
-                        </Button>
-                      </div>
-                    </Col>
-                    <Col xs={6} md={3}>
-                      <div className="d-grid">
-                        <Button
-                          className={
-                            categorySelection.lang == "英语"
-                              ? styles.customCategoryButtonActive
-                              : styles.customCategoryButton
-                          }
-                          onClick={(e) => {
-                            categorySelection.lang == "英语"
-                              ? setLanguageState("")
-                              : setLanguageState("英语");
-                          }}
-                        >
-                          英语
-                        </Button>
-                      </div>
-                    </Col>
-                    <Col xs={6} md={3}>
-                      <div className="d-grid">
-                        <Button
-                          className={
                             categorySelection.lang == "粤语"
                               ? styles.customCategoryButtonActive
                               : styles.customCategoryButton
@@ -532,43 +361,36 @@ export default function Home() {
                       <div className="d-grid">
                         <Button
                           className={
-                            categorySelection.lang == "韩语"
+                            categorySelection.remark == "古风"
                               ? styles.customCategoryButtonActive
                               : styles.customCategoryButton
                           }
                           onClick={(e) => {
-                            categorySelection.lang == "韩语"
-                              ? setLanguageState("")
-                              : setLanguageState("韩语");
+                            categorySelection.remark == "古风"
+                              ? setRemarkState("")
+                              : setRemarkState("古风");
                           }}
                         >
-                          韩语
+                          古风
                         </Button>
                       </div>
                     </Col>
                     <Col xs={6} md={3}>
                       <div className="d-grid">
-
-                      {/** 
-                                            <Button
+                        <Button
                           className={
-                            categorySelection.remark == "钢琴"
+                            categorySelection.remark == "民谣"
                               ? styles.customCategoryButtonActive
                               : styles.customCategoryButton
                           }
                           onClick={(e) => {
-                            categorySelection.remark == "钢琴"
+                            categorySelection.remark == "民谣"
                               ? setRemarkState("")
-                              : setRemarkState("钢琴");
+                              : setRemarkState("民谣");
                           }}
                         >
-                          钢琴
+                          民谣
                         </Button>
-                    */}
-                        <PianoBtn
-                        remarkFilter={categorySelection.remark}
-                        setRemarkState={setRemarkState}
-                      />
                       </div>
                     </Col>
                     <Col xs={6} md={3}>
@@ -689,48 +511,28 @@ export default function Home() {
           <div></div>
         )}
         <footer className={styles.footer}>
-          Copyright © 2022-2023 七宝和她的家人们
+          Copyright © 2024 韩二吖Echoes和她的家人们
         </footer>
       </Container>
       <Offcanvas show={showIntro} onHide={handleCloseIntro}>
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>七禾的自我介绍</Offcanvas.Title>
+          <Offcanvas.Title>韩二吖的自我介绍</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <p className={styles.introParagraph}>
-            🐏咩，这里是小羊人七禾，是一只来自咩星的绵羊（羊毛虽好但不要薅七禾的羊毛⊙∀⊙！）
-            性别女 没有角但有耳朵 身高160cm 生日6月26日
+            🎤 哈喽，这里是韩二吖Echoes！（在这里填写属于你的个性化自我介绍文字哦~）
           </p>
           <p className={styles.introParagraph}>
-            🐏直播内容主打吹拉弹唱（吹水·拉胯·弹钢琴·唱歌），歌曲语言包括中日英粤韩。偶尔偶尔打打游戏
-            {/** （血压飙升的那种。目前直播时间是工作日早上9.40晚上20.40和周末早上10.40晚上21.00。 */}
+            🎵 直播内容主打唱歌和聊天，欢迎大家来直播间听歌放松！
           </p>
           <p className={styles.introParagraph}>
-            🐏本直播间郑重承诺点歌不用戴牌子，只需打米，一个喵娘点唱，sc置顶，上船无限点歌还可以指定学歌噢。个别高能歌曲需要水晶球。
+            🌟 本直播间点歌规则：（请在这里填写您的点歌规则）
           </p>
           <p className={styles.introParagraph}>
-            🐏欢迎大家投递自己生活中有趣的小故事或者苦恼的问题到七羊羊的匿名提问箱，
-            累积到一定数量会开启提问箱专场ε(*･ω･)_/ﾟ:･☆
+            ✨ 感谢每一个来到直播间陪伴我的朋友，希望我们能在这里一起度过开心的时光！
           </p>
-          <p className={styles.introParagraph}>
-            🐏本羊正经的时候超正经，不正经的时候也超不正经，希望新来的朋友可以多来直播间和我一起玩，我们互相了解！我会做你最可爱的小羊，你也会是我最嫩绿可口的那颗草（bushi！
-          </p>
-          <Link href="https://www.tapechat.net/uu/I5WYEZ/AP42LSVE" passHref>
-            <a target="_blank">
-              <Button
-                className={styles.customRandomButton}
-                style={{ border: "2px solid #1D0C26", width: "100%" }}
-              >
-                <img
-                  className={styles.biliIcon}
-                  src="/tapechat.png"
-                  alt="提问箱贴图"
-                />{" "}
-                匿名提问箱 <ChevronSVG />
-              </Button>
-            </a>
-          </Link>
-          <Link href="https://space.bilibili.com/7011134/dynamic" passHref>
+          {/* 真实的歌切链接 */}
+          <Link href="https://space.bilibili.com/1184434512" passHref>
             <a target="_blank">
               <Button
                 className={styles.customRandomButton}
@@ -739,59 +541,9 @@ export default function Home() {
                 <img
                   className={styles.biliIcon}
                   src="/gui_shang.webp"
-                  alt="鬼上いえ头像贴图"
+                  alt="歌切贴图"
                 />{" "}
-                录播组（@鬼上いえ） <ChevronSVG />
-              </Button>
-            </a>
-          </Link>
-          <Link href="https://space.bilibili.com/545589798/dynamic" passHref>
-            <a target="_blank">
-              <Button
-                className={styles.customRandomButton}
-                style={{ border: "2px solid #1D0C26", width: "100%" }}
-              >
-                <img
-                  className={styles.biliIcon}
-                  src="/qie_ge.webp"
-                  alt="屑羊羊切片组贴图"
-                  style={{ borderRadius: "100%" }}
-                />{" "}
-                切片组 <ChevronSVG />
-              </Button>
-            </a>
-          </Link>
-
-          <Link href="https://music.163.com/m/user?id=383239879" passHref>
-            <a target="_blank">
-              <Button
-                className={styles.customRandomButton}
-                style={{ border: "2px solid #1D0C26", width: "100%" }}
-              >
-                <img
-                  className={styles.biliIcon}
-                  src="/163music.ico"
-                  alt="网易云组贴图"
-                />{" "}
-                七禾的网易云主页 <ChevronSVG />
-              </Button>
-            </a>
-          </Link>
-          <Link
-            href="https://i.y.qq.com/n2/m/share/profile_v2/index.html?ADTAG=ryqq.singer&source=ydetail&singermid=003XSaZ01pyD8x"
-            passHref
-          >
-            <a target="_blank">
-              <Button
-                className={styles.customRandomButton}
-                style={{ border: "2px solid #1D0C26", width: "100%" }}
-              >
-                <img
-                  className={styles.biliIcon}
-                  src="/qqmusic.ico"
-                  alt="QQ音乐贴图"
-                />{" "}
-                七禾的QQ音乐主页 <ChevronSVG />
+                二吖歌切 <ChevronSVG />
               </Button>
             </a>
           </Link>
